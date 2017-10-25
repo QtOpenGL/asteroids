@@ -7,6 +7,6 @@ out vec4 v2fcolor;
 
 void main ()
 {
-    gl_Position = model * vPosition ;
+    gl_Position = model * vPosition;
     v2fcolor = vec4 (1, 1, 1, 1);
 }

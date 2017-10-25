@@ -23,9 +23,11 @@ public:
     OpenGLWidget(QWidget* parent = 0);
 
 protected:
+    //OpenGL:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+    //Key Events:
     void keyPressEvent(QKeyEvent* event);
 
 private:

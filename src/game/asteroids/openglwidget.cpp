@@ -84,6 +84,8 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::startGame()
 {
+    factory->Build();
+
     emit updateButtonEnable(false);
     emit updateGameText(QString(""));
 

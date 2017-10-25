@@ -35,7 +35,9 @@ SOURCES += \
     modelfactory.cpp \
     physics.cpp \
     asteroid.cpp \
-    lifemanager.cpp
+    lifemanager.cpp \
+    shadercompiler.cpp \
+    buffercreator.cpp
         ship.cpp
 
 HEADERS += \
@@ -48,7 +50,9 @@ HEADERS += \
     modelfactory.h \
     physics.h \
     asteroid.h \
-    lifemanager.h
+    lifemanager.h \
+    shadercompiler.h \
+    buffercreator.h
 
 FORMS += \
         mainwindow.ui

@@ -6,6 +6,8 @@
 #include "gunshot.h"
 #include "asteroid.h"
 #include "physics.h"
+#include "shadercompiler.h"
+#include "buffercreator.h"
 
 class ModelFactory {
 public:
@@ -14,9 +16,18 @@ public:
 
     QOpenGLWidget* glWidget;
 
+    GLuint shaderProgramDefault = 0;
+    GLuint shaderProgramEnergy  = 0;
+
+    GLuint vaoShip = 0;
+    GLuint vaoGunshot = 0;
+    GLuint vaoAsteroid = 0;
+
     std::shared_ptr<OffModel> shipOffModel = nullptr;
     std::shared_ptr<OffModel> gunshotOffModel = nullptr;
     std::shared_ptr<OffModel> asteroidOffModel = nullptr;
+
+    void Build();
 
     std::shared_ptr<Ship> GetShipInstance();
     std::shared_ptr<Ship> GetScaledShipInstance(float size);

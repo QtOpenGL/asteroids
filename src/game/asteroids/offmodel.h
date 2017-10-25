@@ -23,8 +23,6 @@ public:
     QVector3D midPoint;
     double invDiag;
 
-    void drawModel(float angle, float scale);
-
 private:
     void readOFFFile(const QString& fileName);
 };

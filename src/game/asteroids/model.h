@@ -15,30 +15,16 @@
 
 class Model : public QOpenGLExtraFunctions {
 public:
-    Model(QOpenGLWidget* _glWidget, std::shared_ptr<OffModel> _offModel, float _scale, QString _vertexShaderFile, QString _fragmentShaderFile, QVector3D _initialPosition);
+    Model(QOpenGLWidget* _glWidget, GLuint _vao, unsigned int _numFaces, GLuint _shaderProgram, float _scale, double _invDiag, QVector3D _midPoint, QVector3D _initialPosition);
     ~Model();
 
     QOpenGLWidget* glWidget;
 
-    std::shared_ptr<OffModel> offModel = nullptr;
-
     GLuint vao = 0;
-    GLuint vboVertices = 0;
-    GLuint vboIndices = 0;
     GLuint shaderProgram = 0;
-
-    QString vertexShaderFile;
-    QString fragmentShaderFile;
-
-    void createVBOs();
-    void createShaders();
-    void destroyVBOs();
-    void destroyShaders();
 
     void drawModel();
     void drawModel(float arg);
-
-    void Create();
 
     QMatrix4x4 modelMatrix;
 
@@ -46,7 +32,12 @@ public:
     QVector3D currentPosition;
 
     QString id;
+
+    unsigned int numFaces;
     float scale;
+    double invDiag;
+    QVector3D midPoint;
+
     float hitBoxRadius;
     float angle;
     float color;

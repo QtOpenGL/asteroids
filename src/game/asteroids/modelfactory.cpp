@@ -3,18 +3,36 @@
 ModelFactory::ModelFactory(QOpenGLWidget* _glWidget)
 {
     glWidget = _glWidget;
-
-    QString shipFile = "C:\\Repos\\asteroids\\src\\models\\ship.off";
-    shipOffModel = std::make_shared<OffModel>(shipFile);
-
-    QString gunshotFile = "C:\\Repos\\asteroids\\src\\models\\sphere.off";
-    gunshotOffModel = std::make_shared<OffModel>(gunshotFile);
-
-    QString asteroidFile = "C:\\Repos\\asteroids\\src\\models\\sphere.off";
-    asteroidOffModel = std::make_shared<OffModel>(asteroidFile);
 }
 
 ModelFactory::~ModelFactory(){}
+
+void ModelFactory::Build(){
+    //Shaders files:
+    QString vertexDefaultShaderFile(":/shaders/vshader_default.glsl");
+    QString vertexEnergyShaderFile(":/shaders/vshader_energy.glsl");
+    QString fragmentDefaultShaderFile(":/shaders/fshader_default.glsl");
+
+    //Pre-compiling shaders:
+    std::shared_ptr<ShaderCompiler> shaderCompiler = std::make_shared<ShaderCompiler>(glWidget);
+    shaderProgramDefault = shaderCompiler->compileShaderProgram(vertexDefaultShaderFile, fragmentDefaultShaderFile);
+    shaderProgramEnergy = shaderCompiler->compileShaderProgram(vertexEnergyShaderFile, fragmentDefaultShaderFile);
+
+    //Pre creating buffers:
+    std::shared_ptr<BufferCreator> bufferCreator = std::make_shared<BufferCreator>(glWidget);
+
+    QString shipFile = "C:\\Repos\\asteroids\\src\\models\\ship.off";
+    shipOffModel = std::make_shared<OffModel>(shipFile);
+    vaoShip = bufferCreator->createBuffer(shipOffModel);
+
+    QString gunshotFile = "C:\\Repos\\asteroids\\src\\models\\sphere.off";
+    gunshotOffModel = std::make_shared<OffModel>(gunshotFile);
+    vaoGunshot = bufferCreator->createBuffer(gunshotOffModel);
+
+    QString asteroidFile = "C:\\Repos\\asteroids\\src\\models\\sphere.off";
+    asteroidOffModel = std::make_shared<OffModel>(asteroidFile);
+    vaoAsteroid = bufferCreator->createBuffer(asteroidOffModel);
+}
 
 std::shared_ptr<Ship> ModelFactory::GetShipInstance(){
     float size =  Physics::shipSize;
@@ -22,14 +40,8 @@ std::shared_ptr<Ship> ModelFactory::GetShipInstance(){
 }
 
 std::shared_ptr<Ship> ModelFactory::GetScaledShipInstance(float size){
-    QString vertexShaderFile(":/shaders/vshader_default.glsl");
-    QString fragmentShaderFile(":/shaders/fshader_default.glsl");
-
-
     QVector3D position = QVector3D(0,0,0);
-    std::shared_ptr<Ship> ship = std::make_shared<Ship>(glWidget, shipOffModel, size, vertexShaderFile, fragmentShaderFile, position);
-    ship->Create();
-
+    std::shared_ptr<Ship> ship = std::make_shared<Ship>(glWidget, vaoShip, shaderProgramDefault, shipOffModel->numFaces, size, shipOffModel->invDiag, shipOffModel->midPoint, position);
     ship->id = QUuid::createUuid().toString();
 
     return ship;
@@ -54,8 +66,7 @@ std::shared_ptr<Gunshot> ModelFactory::GetGunshotInstance(Ship* ship){
                 Physics::shipMovimentFactor
              );
 
-    std::shared_ptr<Gunshot> gunshot = std::make_shared<Gunshot>(glWidget, gunshotOffModel, size, vertexShaderFile, fragmentShaderFile, position);
-    gunshot->Create();
+    std::shared_ptr<Gunshot> gunshot = std::make_shared<Gunshot>(glWidget, vaoGunshot, shaderProgramEnergy, gunshotOffModel->numFaces, size, gunshotOffModel->invDiag, gunshotOffModel->midPoint, position);
 
     gunshot->currentPosition = position;
 
@@ -64,6 +75,7 @@ std::shared_ptr<Gunshot> ModelFactory::GetGunshotInstance(Ship* ship){
 
     return gunshot;
 }
+
 
 std::shared_ptr<Asteroid> ModelFactory::GetAsteroidInstance(){
     QString vertexShaderFile(":/shaders/vshader_default.glsl");
@@ -106,8 +118,7 @@ std::shared_ptr<Asteroid> ModelFactory::GetAsteroidInstance(){
     //Random angle
     angle += angleChoice * AngleSignalChoice;
 
-    auto asteroid = std::make_shared<Asteroid>(glWidget, asteroidOffModel, size, vertexShaderFile, fragmentShaderFile, initPoint);
-    asteroid->Create();
+    auto asteroid = std::make_shared<Asteroid>(glWidget, vaoAsteroid, shaderProgramDefault, asteroidOffModel->numFaces, size, asteroidOffModel->invDiag, asteroidOffModel->midPoint, initPoint);
 
     asteroid->currentPosition = initPoint;
     asteroid->angle = angle;

@@ -1,6 +1,6 @@
 #include "gunshot.h"
 
-Gunshot::Gunshot(QOpenGLWidget* _glWidget,  std::shared_ptr<OffModel> _offModel, float _scale, QString _vertexShaderFile, QString _fragmentShaderFile, QVector3D _initialPosition): Model::Model(_glWidget, _offModel, _scale, _vertexShaderFile, _fragmentShaderFile, _initialPosition)
+Gunshot::Gunshot(QOpenGLWidget* _glWidget, GLuint _vao, GLuint _shaderProgram, unsigned int _numFaces, float _scale, double _invDiag, QVector3D _midPoint, QVector3D _initialPosition): Model::Model(_glWidget, _vao, _shaderProgram, _numFaces, _scale, _invDiag, _midPoint, _initialPosition)
 {
 
 }

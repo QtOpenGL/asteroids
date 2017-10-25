@@ -1,8 +1,8 @@
 #include "ship.h"
 
-Ship::Ship(QOpenGLWidget* _glWidget,  std::shared_ptr<OffModel> _offModel, float _scale, QString _vertexShaderFile, QString _fragmentShaderFile, QVector3D _initialPosition): Model::Model(_glWidget, _offModel, _scale, _vertexShaderFile, _fragmentShaderFile, _initialPosition)
+Ship::Ship(QOpenGLWidget* _glWidget, GLuint _vao, GLuint _shaderProgram, unsigned int _numFaces, float _scale, double _invDiag, QVector3D _midPoint, QVector3D _initialPosition): Model::Model(_glWidget, _vao, _shaderProgram, _numFaces, _scale, _invDiag, _midPoint, _initialPosition)
 {
-    this->hitBoxRadius = (this->offModel->invDiag*scale)/2;
+    this->hitBoxRadius = (invDiag*scale)/2;
 }
 
 Ship::~Ship()
