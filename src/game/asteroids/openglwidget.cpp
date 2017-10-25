@@ -123,13 +123,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* event)
         auto gunshot = factory->GetGunshotInstance(ship.get());
         gunshots[gunshot->id] = gunshot;
 
-        //shotPlayer->play();
-    }
-        break;
-    case Qt::Key_A:
-    {
-        auto asteroid = factory->GetAsteroidInstance();
-        asteroids[asteroid->id] = asteroid;
+        shotPlayer->play();
     }
         break;
     case Qt::Key_Escape:
